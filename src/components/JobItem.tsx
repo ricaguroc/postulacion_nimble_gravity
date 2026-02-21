@@ -39,6 +39,7 @@ export default function JobItem({ job, candidate }: Props) {
             await applyToJob({
                 uuid: candidate.uuid,
                 candidateId: candidate.candidateId,
+                applicationId: candidate.applicationId,
                 jobId: job.id,
                 repoUrl: repoUrl.trim(),
             });
