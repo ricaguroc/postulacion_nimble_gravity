@@ -62,3 +62,16 @@ export const applyToJob = (body: {
         method: "POST",
         body: JSON.stringify(body),
     });
+
+export const getSecondChallenge = (email: string) =>
+    request(`/api/candidate/get-second-challenge?email=${encodeURIComponent(email)}`);
+
+export const submitSecondChallenge = (body: {
+    applicationId: string;
+    pastebinUrl: string;
+    answer: number;
+}) =>
+    request(`/api/candidate/submit-second-challenge`, {
+        method: "POST",
+        body: JSON.stringify(body),
+    });

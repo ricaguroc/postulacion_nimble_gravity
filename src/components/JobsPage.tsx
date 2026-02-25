@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { type Candidate, type Job, getCandidateByEmail, getJobs } from "../api/external";
 import JobItem from "./JobItem";
 
-export default function JobsPage() {
-    const [email, setEmail] = useState("");
+export default function JobsPage({ email, trigger }: { email: string, trigger: number }) {
     const [candidate, setCandidate] = useState<Candidate | null>(null);
 
     const [candLoading, setCandLoading] = useState(false);
@@ -36,6 +35,12 @@ export default function JobsPage() {
         };
     }, []);
 
+    useEffect(() => {
+        if (trigger > 0) {
+            loadCandidate();
+        }
+    }, [trigger]);
+
     async function loadCandidate() {
         setCandidate(null);
         setCandError("");
@@ -57,55 +62,41 @@ export default function JobsPage() {
     }
 
     return (
-        <div className="page">
-            <div className="card">
-                <h1>Postulación de Empleo</h1>
-                <p className="muted">
-                    1) Cargá tu email. 2) Elegí una posición y pegá la URL de tu repositorio.
-                </p>
+        <div>
+            <p className="muted">
+                1) Ingresá tu email arriba. 2) Elegí una posición y pegá la URL de tu repositorio.
+            </p>
 
-                <div className="row">
-                    <input
-                        className="input"
-                        placeholder="tu-email@dominio.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        disabled={candLoading}
-                    />
-                    <button className="btn" onClick={loadCandidate} disabled={candLoading}>
-                        {candLoading ? "Cargando..." : "Cargar candidato"}
-                    </button>
+            {candLoading && <div className="banner">Cargando candidato...</div>}
+            {candError && <div className="banner err">{candError}</div>}
+
+            {candidate && (
+                <div className="banner ok">
+                    Candidato: <b>{candidate.firstName} {candidate.lastName}</b> —{" "}
+                    <code>{candidate.candidateId}</code>
                 </div>
+            )}
 
-                {candError && <div className="banner err">{candError}</div>}
-                {candidate && (
-                    <div className="banner ok">
-                        Candidato: <b>{candidate.firstName} {candidate.lastName}</b> —{" "}
-                        <code>{candidate.candidateId}</code>
+            {candidate && (
+                <>
+                    <hr />
+
+                    <h2>Posiciones abiertas</h2>
+
+                    {jobsLoading && <div className="banner">Cargando posiciones...</div>}
+                    {jobsError && <div className="banner err">{jobsError}</div>}
+
+                    {!jobsLoading && !jobsError && jobs.length === 0 && (
+                        <div className="banner">No hay posiciones.</div>
+                    )}
+
+                    <div className="list">
+                        {jobs.map((j) => (
+                            <JobItem key={j.id} job={j} candidate={candidate} />
+                        ))}
                     </div>
-                )}
-
-                {candidate && (
-                    <>
-                        <hr />
-
-                        <h2>Posiciones abiertas</h2>
-
-                        {jobsLoading && <div className="banner">Cargando posiciones...</div>}
-                        {jobsError && <div className="banner err">{jobsError}</div>}
-
-                        {!jobsLoading && !jobsError && jobs.length === 0 && (
-                            <div className="banner">No hay posiciones.</div>
-                        )}
-
-                        <div className="list">
-                            {jobs.map((j) => (
-                                <JobItem key={j.id} job={j} candidate={candidate} />
-                            ))}
-                        </div>
-                    </>
-                )}
-            </div>
+                </>
+            )}
         </div>
     );
 }

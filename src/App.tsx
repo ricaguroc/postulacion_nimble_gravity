@@ -1,6 +1,6 @@
-import JobsPage from "./components/JobsPage";
+import MainApp from "./components/MainApp";
 import "./styles.css";
 
 export default function App() {
-  return <JobsPage />;
+  return <MainApp />;
 }

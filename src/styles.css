@@ -181,3 +181,54 @@ hr {
     border-top: 1px solid var(--border-color);
     margin: 32px 0;
 }
+
+/* Toggle Switch Styles */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.toggle-label {
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--btn-disabled);
+    transition: color 0.2s;
+}
+
+.toggle-label.active {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 64px;
+    height: 32px;
+    background: var(--btn-disabled);
+    border-radius: 32px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggle-switch.active {
+    background: var(--btn-bg);
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    background: var(--bg-color);
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.toggle-switch.active .toggle-slider {
+    transform: translateX(32px);
+}
